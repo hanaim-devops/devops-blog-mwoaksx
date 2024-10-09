@@ -5,7 +5,7 @@
 *[Max van Oostwaard, oktober 2024.](https://github.com/hanaim-devops/devops-blog-mwoaksx)*
 <hr/>
 
-Monitoring is een van de cornerstone van een succesvol DevOps-proces. Zonder goede monitoring is het lastig om de prestaties en beschikbaarheid van systemen te waarborgen, wat kan leiden tot downtime of prestatieproblemen die de eindgebruiker direct beïnvloeden. 
+Monitoring is een van de cornerstones van een succesvol DevOps-proces. Zonder goede monitoring is het lastig om de prestaties en beschikbaarheid van systemen te waarborgen, wat kan leiden tot downtime of prestatieproblemen die de eindgebruiker direct beïnvloeden. 
 
 Monitoring en de tools hiervan bieden realtime controle aan, van planning tot productie, en helpt teams snel te reageren op problemen door middel van geautomatiseerde waarschuwingen en geavanceerde visualisaties om zo het hierboven gestelde probleem te voorkomen. Het stelt developmentteams in staat om tijdig fouten te detecteren en te behandelen, wat grote problemen op omgevingen vermindert en de gebruikerservaring verhoogt (Sai, z.d.).
 
@@ -53,7 +53,52 @@ De nadelen van Zabbix:
 - Interface: De interface van Zabbix is functioneel maar minder intuïtief dan die van commerciële oplossingen zoals Datadog of Grafana, vooral voor gebruikers die gewend zijn aan meer moderne UI’s.
 
 ## Monitoren met Zabbix
-[Een praktisch voorbeeld/demo over Zabbix. Hoe zorg je er voor dat je Zabbix lokaal krijgt runnen en dat je het een en ander kan zien. Misschien een kant en klare docker compose file met alle benodigde containers om in Zabbix een database te volgen? Plus een stappenplan om dit goed op te zetten (indien dit niet gebeurdt in de docker compose file). Dan natuurlijk ook een uitleg voor alle benodigde pagina's/tabjes in Zabbix die gebruikt worden]
+
+Zabbix biedt dus mogelijkheid om infrastructuren en systemen erg breetd te monitoren. Om hier een kleine visualisatie van te geven, geef ik een praktisch voorbeeld over hoe je Zabbix kunt inzetten om je localhost te monitoren.
+
+Maar waarom localhost? Een monitoringtool zoals Zabbix draait eigenlijk altijd op een server en kan vanaf daar verschillende infrastructuren & systemen in de gaten houden. Maar wat als je, net zoals ik, geen toegang hebt tot een server? Dan wordt het lastig om de gezondheid en prestaties van deze systemen bij te houden. Gelukkig kun je ook je localhost monitoren met Zabbix! Aangezien elk apparaat over een localhost beschikt, is dit een ideale vervanging voor een echte server. Dit is ook een eenvoudige manier om kort in aanraking te komen met Zabbix
+
+### Zabbix opzetten
+
+Om te beginnen, heb ik voor het gemak er voor gekozen om Zabbix te runne via Docker Compose. Dit zorgt er voor dat je Zabbix niet lokaal hoeft te instaleren. 
+
+Clone repo: git clone https://github.com/zabbix/zabbix-docker.git
+Als het goed is, zit je al in de juiste en de nieuwste versie (7.0). Maar laten we toch even er naartoe switchen: git checkout 7.0
+
+Wat je zojuist hebt binnengehaald is de github repository van Zabbix waar alle Docker Compose files, dockerfiles en enviroment variabele staan. Deze zijn kant en klaar voor gebruik waardoor we zelf niks meer hoeven te doen! Natuurlijk als je dit wel zelf zou willen aanpassen, dan zal je de juiste Docker Compose file & de bijbehorende dockerfiles & enviroment variabele moeten kopieëren naar je eigen project.
+Zoals je ook kan zien zijn er aardig wat Docker Compose bestanden aanwezig. Deze bestanden zijn allemaal gemaakt om Zabbix net weer wat anders te runnen. Dit kan je ook zien aan de bestandsnamen. De naamgeving van de bestandsnamen bestaan uit 4 onderdelen. Deze zullen we even ontleden om het wat duidelijker te laten zien. Laten we als voorbeeld de Compose file ontleden die we ook gaan gebruiken dadelijk:
+`docker-compose_v3_alpine_mysql_latest` bestaat uit de volgende 4 onderdelen:
+- `docker-compose_v3`: Dit is de versie van de Docker Compose waarvan gebruikt gemaakt wordt, in dit geval Docker Compose 3
+- `alpine`: De linux versie van de container waarop de docker-services gaan draaien. In dit geval is dit Alpine-linux
+- `mysql`: Welke database geondersteund wordt & wordt gekoppeld aan Zabbix om data van Zabbix op te slaan. In dit geval wordt er gebruikt gemaakt van een MySQL database
+- `latest`: Welke versie alle servies moeten zijn, dit zal hier dus altijd de laatste en nieuwste versie zijn. De andere optie is `local`. [Leg uit wat dit doet]
+
+Daarna gebruik je dit Docker Compose commando om Zabbix op te starten:
+docker compose -f ./docker-compose_v3_alpine_mysql_latest.yaml --profile full up
+
+Dit Docker Compose commando heeft 2 opties waar we vooral op moeten letten:
+- `-f` optie: Hier geef je de gewenste Docker Compose file mee
+- `--profile` optie: Kan niks, `full` of `all` zijn. [Korte uitleg over docker profiles]
+
+Het pullen, builden, runnen en initaliseren van deze images kan eventjes duren aangezien je nu best aardig wat binnenhaalt. Als eenmaal alles is binnengehaald kan je even snel checken of alles is goedgegaan via Docker Desktop. Het moet er dan ongeveer als volgend uit moeten zien:
+
+[Screenshot van Docker Desktop wanneer alles runt]
+
+De containers die je hier allemaal ziet zijn niet allemaal even belangrijk voor dit voorbeeld. Daarom hieronder even een korte uitleg van de containers die voor ons van belang zijn:
+- [Uitleg van containers (Optioneel)]
+
+Ga naar localhost:80 en zie hiet het hoofdscherm van Zabbix. Gefeliciteerd, je bent voor het eerst in aanraking gekomen met Zabbix! Er staat al van alles op je scherm, gelukkig hoef je hier (nog) niet aan te komen.
+
+### Aanmaken van een Hosts
+We moeten er nu eerst voor zorgen dat Zabbix ook echt wat gaat doen, wat in dit voorbeeld dis het monitoren van de localhost is. Een infrastructuur, systeem, applicatie, etc. binnen in Zabbix heet een host. Deze moeten we eerst aanmaken voordat we uberhaubt wat kunnen doen. Via de zijbalk gaan we naar `Datacollection` -> `Hosts`. Dit scherm is er voor om al je hosts te kunnen bewerken, aanmaken en verwijderen.
+
+Zoals je kan zien staat er al een hosts ingestelt. Dit is een host die automatisch staat ingestelt met Zabbix. Deze mag je negeren of zelfs verwijderen. Een nieuwe host aanmaken kan via de knop rechtsboven in het scherm
+
+[Uitleg over hoe je de host instelt & dat ie kijkt naar de Zaabbix-agent]
+
+Het kan een tijdje duren voordat de host is opgepikt door Zabbix, maar uiteindelijk moet het `Availability` vakje groen zijn, dit kan dus even duren. Als dit zo is, kan je navigeren naar `Monitoring` -> `Hosts` en klik je daar op de zojuist aangemaakte hosts en kies je de optie `Graphs`. Hier zie je veel verschillende grafieken waar gebeurtenissen bijgehouden worden van je localhost. Een goed voorbeeld om te kunnen zien of het werkt is de grafiek `CPU usage`. Dit is de grafiek om het CPU gebruik van de host te zien. Start bijvoorbeeld eens een paar nieuwe docker containers op terwijl je Zabbix draait. Dan zul je zien dat de grafiek op het moment wanneer de containers gebuild en gerunt worden een stuk omhoog schiet. Natuurlijk is dit een voorbeeld en kan je ook kijken naar de vele andere grafieken die Zabbix toont.
+
+[Kleine afsluiting met wat je zojuist gedaan hebt. Sammenvatting soort van]
 
 ## Waarom Zabbix binnen DevOps workflow's
 [Uitleggen waarom je Zabbix zou willen intregregen in je DevOps workflow en welke opties je hebt om dit voor elkaar te krijgen]
@@ -63,5 +108,11 @@ De nadelen van Zabbix:
 
 ## Bronnen
 - Sai, K. S. (z.d.). DevOps-Monitoring | Atlassian. Atlassian. https://www.atlassian.com/nl/devops/devops-tools/devops-monitoring
+
+https://www.zabbix.com/documentation/current/en/manual/introduction/features (voor voor & nadelen)
+
+https://docs.docker.com/compose/how-tos/profiles/ (Kort vertellen over profiles in docker)
+
+https://github.com/zabbix/zabbix-docker/blob/7.0/docker-compose_v3_alpine_mysql_latest.yaml (Link naar github docker compose)
 
 <!-- Installeer de aangeraden [mdlint](https://github.com/DavidAnson/markdownlint). Voeg je eerste plaatje en bronnen in.  -->
