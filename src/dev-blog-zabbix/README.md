@@ -1,4 +1,4 @@
-# Hier komt de titel van je blog
+# Monitoring met Zabbix
 
 <img src="plaatjes/Zabbix_logo_square.svg.png" width="250" align="right" alt="Zabbix Logo" title="Zabbix Logo">
 
