@@ -12,6 +12,7 @@ Monitoring en de tools hiervan bieden realtime controle aan, van planning tot pr
 In deze blogpost neem ik je mee in een diepere duik op een specifieke monitoringtools genaamt Zabbix en wat deze is, hoe het je kan helpen om je systemen effectief te monitoren, en hoe je het kunt integreren in je DevOps-werkflow. Of je nu servers, databases, applicaties of netwerken moet monitoren, Zabbix biedt een veelzijdige oplossing die je processen slimmer en efficiënter maakt.
 
 ## Kort over Zabbix
+
 Zabbix is een krachtige, open-source monitoringtool die wordt gebruikt om de prestaties, beschikbaarheid en veiligheid van IT-infrastructuren te bewaken. Of je nu de gezondheid van servers, netwerken, containers, databases of applicaties wilt monitoren, Zabbix biedt de benodigde tools om dit te doen (Zabbix-c, z.d.).
 
 Een van de belangrijkste voordelen van Zabbix is dat het gegevens in real-time kan verzamelen. Dit betekent dat zodra een bepaalde drempelwaarde (bijvoorbeeld CPU-gebruik) wordt overschreden, Zabbix meteen een melding kan sturen. Je kunt dashboards configureren waarin je de verzamelde statistieken kunt visualiseren en bekijken. Zo kun je bijvoorbeeld in één oogopslag zien hoe goed je infrastructuur presteert en snel ingrijpen als er problemen of fouten zijn.
@@ -28,6 +29,7 @@ Concrete monitoringtoepassingen in Zabbix:
 - Databases (query-latenties, connecties, opslaggebruik)
 
 ## Voor- en nadelen van Zabbix
+
 Nu we weten wat Zabbix is, is het belangrijk om te kijken naar de voor- en nadelen van deze tool, en hoe het zich verhoudt tot andere monitoringtools.
 
 De voordelen van Zabbix:
@@ -41,8 +43,6 @@ De voordelen van Zabbix:
 - Extreem aanpasbaar: Of je nu rapportages, dashboards of meldingen wilt aanpassen, Zabbix biedt een hoge mate van flexibiliteit. Je kunt triggers instellen die specifieke acties uitvoeren wanneer bepaalde drempelwaarden worden overschreden.
 
 - Integraties met andere tools: Zabbix integreert goed met andere tools die veel worden gebruikt in DevOps, zoals Jenkins, Ansible, en Slack. Hierdoor kun je meldingen ontvangen, automatisch tests starten, of bepaalde taken automatiseren.
-
-Zabbix kan bijvoorbeeld vergeleken worden met tools als Nagios, Prometheus of Datadog. Waar Nagios ook een populaire tool is voor monitoring, is het meer gericht op eenvoudige setups (Gillis, 2023). Prometheus, daarentegen, wordt vaak geprezen om zijn eenvoud en focus op metrics, maar het mist de geavanceerde triggers en meldingen van Zabbix (Mane, 2022). Datadog is een commerciële oplossing die zich richt op grote bedrijven, maar de kosten kunnen snel oplopen (Dines, 2024), terwijl Zabbix een gratis alternatief biedt met vergelijkbare functies.
 
 De nadelen van Zabbix:
 
@@ -68,37 +68,49 @@ De repository bevat Docker Compose-bestanden, Dockerfiles en omgevingsvariabelen
 
 Binnen de repository vind je meerdere Docker Compose-bestanden, elk geschikt voor verschillende opstellingen van Zabbix. De naam van elk bestand geeft informatie over hoe Zabbix draait. Bijvoorbeeld, de naam `docker-compose_v3_alpine_mysql_latest` kan als volgt worden ontleed:
 
-`docker-compose_v3`: Specificeren van het gebruik van Docker Compose versie 3.
-`alpine`: Geeft aan dat de services draaien op Alpine Linux
-`mysql`: Zabbix maakt in dit geval gebruik van een MySQL-database voor de opslag haar data
-`latest`: Alle services draaien op de nieuwste beschikbare versie
+- `docker-compose_v3`: Specificeren van het gebruik van Docker Compose versie 3.
+- `alpine`: Geeft aan dat de services draaien op Alpine Linux
+- `mysql`: Zabbix maakt in dit geval gebruik van een MySQL-database voor de opslag haar data
+- `latest`: Alle services draaien op de nieuwste beschikbare versie
 
 Voor dit voorbeeld gebruiken we ook dit specifieke Docker Compose-bestand. Start Zabbix met het volgende commando:
 `docker compose -f ./docker-compose_v3_alpine_mysql_latest.yaml --profile full up -d`
 
 Dit Docker Compose commando heeft 2 opties waar we vooral op moeten letten:
+
 - De `-f` optie geeft het pad naar het juiste Docker Compose-bestand
 - De `--profile` optie kan worden gebruikt om verschillende services in te schakelen op basis van hun profielen (Docker, z.d.). In ons geval gebruiken we het full profiel om alle benodigde services op te starten
 
-Het binnenhalen en opstarten van de Zabbix services kan even duren. Zodra alles is opgezet, kun je via Docker Desktop controleren of alle containers actief zijn. Je zou iets moeten zien zoals hieronder:
+Het binnenhalen en opstarten van de Zabbix services kan even duren. Zodra alles is opgezet, kun je via Docker Desktop controleren of alle containers actief zijn. Je zou iets moeten zien zoals hieronder in figuur 1:
 
 <img src="plaatjes/running_zabbix_docker_compose.png" alt="Running Zabbix containers via Docker Compose in Docker Desktop" title="Zabbix Docker Containers running in Docker Desktop">
 
+<i>Figuur 1: Zabbix containers in Docker Desktop</i>
+
+<br />
+
 De containers hebben elk hun eigen rol binnen Zabbix. Voor dit voorbeeld is niet elke container relevant en worden er een paar ook niet zelfbewust door ons gebruikt. Voor dit voorbeeld zijn vooral de volgende containers relevant:
+
 - `Zabbix-web-nginx`: Dit is de webinterface van Zabbix
 - `zabbix-server`: Het centrale procces van de Zabbox software die alle gegevens beheert en verwerkt (Zabbix-a, z.d.)
 - `zabbix-agent`: Deze agent monitort lokale bronnen en stuurt gegevens door naar de server (Zabbix-b, z.d.).
 
-Ga nu naar `localhost:80` in je browser, waar je het dashboard van Zabbix zou moeten zien.
+Ga nu naar `localhost:80` in je browser, waar je het dashboard van Zabbix zou moeten zien zoals in figuur 2.
 
 <img src="plaatjes/zabbix_7_homescreen.png" alt="Zabbix version 7 homescreen" title="Zabbix version 7 homescreen">
+
+<i>Figuur 2: Zabbix dashboard</i>
+
+<br />
 
 Gefeliciteerd, je hebt Zabbix succesvol opgestart! Er staat al een hoop informatie op je scherm, hier hoef je niets aan te veranderen of aan te komen.
 
 ### Aanmaken van een Hosts
+
 Om Zabbix daadwerkelijk te laten monitoren, moeten we een "host" toevoegen. In dit voorbeeld willen we de localhost monitoren. In Zabbix vertegenwoordigt een host een infrastructuur, systeem of applicatie. We beginnen met het aanmaken van een host. Navigeer via de zijbalk naar `Datacollection` -> `Hosts`. Dit scherm toont een overzicht van alle bestaande hosts.
 
 Waarschijnlijk zie je al een host die automatisch is aangemaakt. Deze kun je negeren, verwijderen of disabelen (deze optie heeft de voorkeur). Klik rechtsboven om een nieuwe host aan te maken en vul de volgende gegevens in bij het eerste tabje die je ziet. De rest van de tabjes en/of opties noef je niks mee te doen.
+
 - Hostname: `Localhost`
 - Templates:
   - Select -> `Templates` -> `Zabbix server health`
@@ -111,9 +123,13 @@ Waarschijnlijk zie je al een host die automatisch is aangemaakt. Deze kun je neg
   - Connect to -> `DNS`
   - Port -> `10050` (de standaardpoort voor de Zabbix-agent die we hebben opgestart).
 
-Je invoer zou er ongeveer zo uit moeten zien:
+Je invoer zou er ongeveer uit moeten zien zoals in figuur 3:
 
 <img src="plaatjes/zabbix_7_create_host.png" alt="Create a host Zabbix page" title="Create a host zabbix page">
+
+<i>Figuur 3: Creëren van host in Zabbix</i>
+
+<br />
 
 Klik nu op `Add` om de host toe te voegen.
 
@@ -121,22 +137,32 @@ Het kan even duren voordat de host beschikbaar is. Zodra de host is herkend, zou
 
 <img src="plaatjes/zabbix_7_host_active.png" alt="A Zabbix hosts that is active" title="Acitve Zabbix host">
 
+<i>Figuur 4: Een actieve host in Zabbix</i>
+
+<br />
+
 Als je host actief is, kun je via `Monitoring` -> `Hosts` naar de host gaan en klikken op `Graphs`. Hier zie je diverse grafieken met realtime statistieken van de localhost. Een voorbeeld is de `CPU usage` grafiek. Start een aantal extra Docker containers op om te zien hoe de grafiek reageert; het CPU-gebruik zal stijgen wanneer nieuwe containers worden opgestart.
 
 <img src="plaatjes/zabbix_7_cpu_usage_graph.png" alt="Zabbix CPU usage graph" title="Zabbix CPU usage graph">
 
-In dit voorbeeld hebben we Zabbix succesvol opgezet met Docker Compose en een nieuwe host aangemaakt om de localhost te monitoren. We hebben de basisprincipes van het gebruik van Zabbix besproken, zoals het kiezen van de juiste Docker Compose-opstelling, het starten van de services, en het configureren van een host voor monitoring. Vervolgens hebben we met behulp van Zabbix-agent de prestaties van de server, zoals het CPU-gebruik, inzichtelijk gemaakt met behulp van grafieken. 
+<i>Figuur 4: CPU usage grafiek in Zabbix</i>
 
-Als je verder wilt duiken in Zabbix en geavanceerde functies zoals geautomatiseerde triggers, aangepaste templates, of integraties met andere DevOps-tools of het customizeren van dashboards, raad ik aan om de uitgebreide Zabbix documentatie te raadplegen.
+<br />
+
+In dit voorbeeld hebben we Zabbix succesvol opgezet met Docker Compose en een nieuwe host aangemaakt om de localhost te monitoren. We hebben de basisprincipes van het gebruik van Zabbix besproken, zoals het kiezen van de juiste Docker Compose-opstelling, het starten van de services, en het configureren van een host voor monitoring. Vervolgens hebben we met behulp van Zabbix-agent de prestaties van de server, zoals het CPU-gebruik, inzichtelijk gemaakt met behulp van grafieken.
+
+Als je verder wilt duiken in Zabbix en geavanceerde functies zoals geautomatiseerde triggers, aangepaste templates, of integraties met andere DevOps-tools of het customizeren van dashboards, raad ik aan om de uitgebreide [Zabbix documentatie](https://www.zabbix.com/documentation) te raadplegen.
 
 ## Waarom Zabbix binnen DevOps workflow's
+
 Zabbix biedt uitgebreide mogelijkheden voor real-time monitoring en automatisering, wat perfect aansluit bij een DevOps-werkflow waarin snelle feedback en continue integratie essentieel zijn. Met Zabbix kun je gemakkelijk de prestaties van je applicaties monitoren, waardoor je snel kunt zien of er problemen zijn na bijvoorbeeld een nieuwe release (Sanders, 2024).
 
 Een belangrijk onderdeel van Zabbix is de mogelijkheid om het te integreren met andere tools die vaak binnen DevOps worden gebruikt, zoals Jenkins voor CI/CD-pipelines (Feltrin, 2018). Stel je voor dat je een nieuwe versie van je applicatie uitrolt. Zabbix kan meteen gaan monitoren of de nieuwe versie correct werkt en of er geen onverwachte fouten optreden. Als Zabbix een probleem detecteert, kan het automatisch een terugrolplan in gang zetten, of je waarschuwen via een tool zoals Slack, zodat je direct kunt reageren.
 
 De mogelijkheid om triggers in te stellen zorgt ervoor dat teams niet constant handmatig hun systemen in de gaten hoeven te houden. Als er bijvoorbeeld een probleem optreedt in de infrastructuur, zoals een server die overbelast raakt of een database die niet meer reageert, kan Zabbix automatisch meldingen sturen, systemen herstarten, of schalingstaken uitvoeren. Hierdoor verloopt het beheer van de infrastructuur veel soepeler en kunnen problemen worden opgelost voordat ze een impact hebben op de eindgebruikers.
 
-## Conclusie (optioneel)
+## Conclusie
+
 In deze blog hebben we de veelzijdigheid en kracht van Zabbix als monitoringtool binnen DevOps-omgevingen verkend. We hebben gezien hoe eenvoudig het is om Zabbix op te zetten met Docker Compose en hoe je een nieuwe host kunt configureren om je localhost te monitoren. Door middel van grafieken hebben we de prestaties van de server in realtime kunnen volgen, wat ons waardevolle inzichten biedt.
 
 Zabbix stelt teams in staat om proactief te reageren op incidenten en zorgt voor een efficiënter beheer van infrastructuur en applicaties. De mogelijkheid om Zabbix te integreren met andere DevOps-tools zoals Jenkins versterkt het hele CI/CD-proces, wat resulteert in snellere feedback loops en verbeterde samenwerking.
@@ -144,25 +170,20 @@ Zabbix stelt teams in staat om proactief te reageren op incidenten en zorgt voor
 Hoewel de leercurve van Zabbix erg hoog is en het voor beginners begrijpelijk is om een andere optie te kiezen, heb je met Zabbix een krachtig hulpmiddel in handen om je DevOps-praktijken naar een hoger niveau te tillen en ervoor te zorgen dat je applicaties altijd optimaal presteren.
 
 ## Bronnen
-- Atlassian, & Sai, K. S. (z.d.). DevOps-Monitoring | Atlassian. Atlassian. Geraadpleegd op 9 oktober 2024, van https://www.atlassian.com/nl/devops/devops-tools/devops-monitoring
 
-- Dines, R. (2024, 20 september). Real talk: Why does Datadog cost so much? Chronosphere. Geraadpleegd op 10 oktober 2024, van https://chronosphere.io/learn/real-talk-why-is-datadog-so-expensive/
+- Atlassian, & Sai, K. S. (z.d.). *DevOps-Monitoring | Atlassian*. Atlassian. Geraadpleegd op 9 oktober 2024, van <https://www.atlassian.com/nl/devops/devops-tools/devops-monitoring>
 
-- Docker. (z.d.). “Use service profiles”. Docker Documentation. Geraadpleegd op 10 oktober 2024, van https://docs.docker.com/compose/how-tos/profiles/
+- Docker. (z.d.). *“Use service profiles”*. Docker Documentation. Geraadpleegd op 10 oktober 2024, van https://docs.docker.com/compose/how-tos/profiles/
 
-- Feltrin, J. M. (2018, 29 april). Monitoring Jenkins Jobs with zabbix LLD - Jean Michel Feltrin - Medium. Medium. Geraadpleegd op 10 oktober 2024, van https://medium.com/@feltrin/monitoring-jenkins-jobs-with-zabbix-lld-3a19233e54b8
+- Feltrin, J. M. (2018, 29 april). *Monitoring Jenkins Jobs with zabbix LLD - Jean Michel Feltrin - Medium*. Medium. Geraadpleegd op 10 oktober 2024, van https://medium.com/@feltrin/monitoring-jenkins-jobs-with-zabbix-lld-3a19233e54b8
 
-- Gillis, A. S. (2023, 5 juli). Nagios. Techtarget. Geraadpleegd op 10 oktober 2024, van https://www.techtarget.com/searchitoperations/definition/Nagios
+- Sanders, K. (2024, 2 oktober). *DevOps Automation: A Complete Guide to Efficient Development*. The CTO Club. Geraadpleegd op 10 oktober 2024, van https://thectoclub.com/development-devops/devops-automation/
 
-- Mane, T. (2022, 21 september). Prometheus monitoring. easy explained. - Tejas Mane - medium. Medium. Geraadpleegd op 10 oktober 2024, van https://medium.com/@tejasmane485/prometheus-monitoring-easy-explained-e065e754349a
-
-- Sanders, K. (2024, 2 oktober). DevOps Automation: A Complete Guide to Efficient Development. The CTO Club. Geraadpleegd op 10 oktober 2024, van https://thectoclub.com/development-devops/devops-automation/
-
-- Zabbix. (z.d.-a). Zabbix Documentation | 1 Server. Geraadpleegd op 10 oktober 2024, van https://www.zabbix.com/documentation/current/en/manual/concepts/server
+- Zabbix. (z.d.-a). *Zabbix Documentation | 1 Server*. Geraadpleegd op 10 oktober 2024, van https://www.zabbix.com/documentation/current/en/manual/concepts/server
 https://www.zabbix.com/documentation/current/en/manual/introduction/features
 
-- Zabbix. (z.d.-b). Zabbix Documentation | 2 Agent. Geraadpleegd op 10 oktober 2024, van https://www.zabbix.com/documentation/current/en/manual/concepts/agent
+- Zabbix. (z.d.-b). *Zabbix Documentation | 2 Agent*. Geraadpleegd op 10 oktober 2024, van https://www.zabbix.com/documentation/current/en/manual/concepts/agent
 
-- Zabbix. (z.d.-c). Zabbix Documentation | 2 What is Zabbix. Geraadpleegd op 10 oktober 2024, van https://www.zabbix.com/documentation/current/en/manual/introduction/about
+- Zabbix. (z.d.-c). *Zabbix Documentation | 2 What is Zabbix*. Geraadpleegd op 10 oktober 2024, van https://www.zabbix.com/documentation/current/en/manual/introduction/about
 
 <!-- Installeer de aangeraden [mdlint](https://github.com/DavidAnson/markdownlint). Voeg je eerste plaatje en bronnen in.  -->
