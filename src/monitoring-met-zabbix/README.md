@@ -85,7 +85,7 @@ Het binnenhalen en opstarten van de Zabbix services kan even duren. Zodra alles 
 
 <img src="plaatjes/running_zabbix_docker_compose.png" alt="Running Zabbix containers via Docker Compose in Docker Desktop" title="Zabbix Docker Containers running in Docker Desktop">
 
-<i>Figuur 1: Zabbix containers in Docker Desktop</i>
+*Figuur 1*: Zabbix containers in Docker Desktop
 
 <br />
 
@@ -99,7 +99,7 @@ Ga nu naar `localhost:80` in je browser, waar je het dashboard van Zabbix zou mo
 
 <img src="plaatjes/zabbix_7_homescreen.png" alt="Zabbix version 7 homescreen" title="Zabbix version 7 homescreen">
 
-<i>Figuur 2: Zabbix dashboard</i>
+*Figuur 2*: Zabbix dashboard</i>
 
 <br />
 
@@ -127,7 +127,7 @@ Je invoer zou er ongeveer uit moeten zien zoals in figuur 3:
 
 <img src="plaatjes/zabbix_7_create_host.png" alt="Create a host Zabbix page" title="Create a host zabbix page">
 
-<i>Figuur 3: Creëren van host in Zabbix</i>
+*Figuur 3*: Creëren van host in Zabbix
 
 <br />
 
@@ -137,15 +137,15 @@ Het kan even duren voordat de host beschikbaar is. Zodra de host is herkend, zou
 
 <img src="plaatjes/zabbix_7_host_active.png" alt="A Zabbix hosts that is active" title="Acitve Zabbix host">
 
-<i>Figuur 4: Een actieve host in Zabbix</i>
+*Figuur 4*: Een actieve host in Zabbix
 
 <br />
 
-Als je host actief is, kun je via `Monitoring` -> `Hosts` naar de host gaan en klikken op `Graphs`. Hier zie je diverse grafieken met realtime statistieken van de localhost. Een voorbeeld is de `CPU usage` grafiek. Start een aantal extra Docker containers op om te zien hoe de grafiek reageert; het CPU-gebruik zal stijgen wanneer nieuwe containers worden opgestart.
+Als je host actief is, kun je via `Monitoring` -> `Hosts` naar de host gaan en klikken op `Graphs`. Hier zie je diverse grafieken met realtime statistieken van de localhost. Een voorbeeld is de `CPU usage` grafiek. Start een aantal extra Docker containers op om te zien hoe de grafiek reageert; het CPU-gebruik zal stijgen wanneer je nieuwe containers opstart.
 
 <img src="plaatjes/zabbix_7_cpu_usage_graph.png" alt="Zabbix CPU usage graph" title="Zabbix CPU usage graph">
 
-<i>Figuur 4: CPU usage grafiek in Zabbix</i>
+*Figuur 5*: CPU usage grafiek in Zabbix
 
 <br />
 
@@ -153,7 +153,7 @@ In dit voorbeeld hebben we Zabbix succesvol opgezet met Docker Compose en een ni
 
 Als je verder wilt duiken in Zabbix en geavanceerde functies zoals geautomatiseerde triggers, aangepaste templates, of integraties met andere DevOps-tools of het customizeren van dashboards, raad ik aan om de uitgebreide [Zabbix documentatie](https://www.zabbix.com/documentation) te raadplegen.
 
-## Waarom Zabbix binnen DevOps workflow's
+## Waarom Zabbix binnen DevOps workflow's?
 
 Zabbix biedt uitgebreide mogelijkheden voor real-time monitoring en automatisering, wat perfect aansluit bij een DevOps-werkflow waarin snelle feedback en continue integratie essentieel zijn. Met Zabbix kun je gemakkelijk de prestaties van je applicaties monitoren, waardoor je snel kunt zien of er problemen zijn na bijvoorbeeld een nieuwe release (Sanders, 2024).
 
@@ -171,19 +171,10 @@ Hoewel de leercurve van Zabbix erg hoog is en het voor beginners begrijpelijk is
 
 ## Bronnen
 
-- Atlassian, & Sai, K. S. (z.d.). *DevOps-Monitoring | Atlassian*. Atlassian. Geraadpleegd op 9 oktober 2024, van <https://www.atlassian.com/nl/devops/devops-tools/devops-monitoring>
-
-- Docker. (z.d.). *“Use service profiles”*. Docker Documentation. Geraadpleegd op 10 oktober 2024, van https://docs.docker.com/compose/how-tos/profiles/
-
-- Feltrin, J. M. (2018, 29 april). *Monitoring Jenkins Jobs with zabbix LLD - Jean Michel Feltrin - Medium*. Medium. Geraadpleegd op 10 oktober 2024, van https://medium.com/@feltrin/monitoring-jenkins-jobs-with-zabbix-lld-3a19233e54b8
-
-- Sanders, K. (2024, 2 oktober). *DevOps Automation: A Complete Guide to Efficient Development*. The CTO Club. Geraadpleegd op 10 oktober 2024, van https://thectoclub.com/development-devops/devops-automation/
-
-- Zabbix. (z.d.-a). *Zabbix Documentation | 1 Server*. Geraadpleegd op 10 oktober 2024, van https://www.zabbix.com/documentation/current/en/manual/concepts/server
-https://www.zabbix.com/documentation/current/en/manual/introduction/features
-
-- Zabbix. (z.d.-b). *Zabbix Documentation | 2 Agent*. Geraadpleegd op 10 oktober 2024, van https://www.zabbix.com/documentation/current/en/manual/concepts/agent
-
-- Zabbix. (z.d.-c). *Zabbix Documentation | 2 What is Zabbix*. Geraadpleegd op 10 oktober 2024, van https://www.zabbix.com/documentation/current/en/manual/introduction/about
-
-<!-- Installeer de aangeraden [mdlint](https://github.com/DavidAnson/markdownlint). Voeg je eerste plaatje en bronnen in.  -->
+- Sai, K. (z.d.). *DevOps-Monitoring | Atlassian*. Atlassian. Geraadpleegd op 9 oktober 2024, van <https://www.atlassian.com/nl/devops/devops-tools/devops-monitoring>
+- Docker. (z.d.). *“Use service profiles”*. Docker Documentation. Geraadpleegd op 10 oktober 2024, van <https://docs.docker.com/compose/how-tos/profiles/>
+- Feltrin, J. M. (2018, 29 april). *Monitoring Jenkins Jobs with zabbix LLD - Jean Michel Feltrin - Medium*. Medium. Geraadpleegd op 10 oktober 2024, van <https://medium.com/@feltrin/monitoring-jenkins-jobs-with-zabbix-lld-3a19233e54b8>
+- Sanders, K. (2024, 2 oktober). *DevOps Automation: A Complete Guide to Efficient Development*. The CTO Club. Geraadpleegd op 10 oktober 2024, van <https://thectoclub.com/development-devops/devops-automation/>
+- Zabbix. (z.d.-a). *Zabbix Documentation | 1 Server*. Geraadpleegd op 10 oktober 2024, van <https://www.zabbix.com/documentation/current/en/manual/concepts/server>
+- Zabbix. (z.d.-b). *Zabbix Documentation | 2 Agent*. Geraadpleegd op 10 oktober 2024, van <https://www.zabbix.com/documentation/current/en/manual/concepts/agent>
+- Zabbix. (z.d.-c). *Zabbix Documentation | 2 What is Zabbix*. Geraadpleegd op 10 oktober 2024, van <https://www.zabbix.com/documentation/current/en/manual/introduction/about>
